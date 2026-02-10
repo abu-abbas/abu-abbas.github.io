@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CV Brittany Chiang - High Density Vue Version</title>
+  <title>Wibowo Sulistiyo - Curriculum Vitae</title>
   <!-- Vue 3 Global Build -->
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <!-- Tailwind CSS -->
@@ -44,7 +44,6 @@
           </header>
 
           <section>
-            <!-- Margin bottom dikurangi 50% (mb-6 -> mb-3) -->
             <h2 class="text-[14px] font-bold text-[#3b5bdb] mb-3">
               Relevant Experience
             </h2>
@@ -92,7 +91,6 @@
 
           <!-- Section: Skills -->
           <section>
-            <!-- Margin bottom dikurangi 50% (mb-4 -> mb-2) -->
             <h2 class="text-[14px] font-bold text-[#3b5bdb] mb-2 border-b border-slate-50 pb-1">Skills</h2>
             <div class="space-y-5">
               <div v-for="skill in skills" :key="skill.title" class="text-sidebar">
@@ -104,7 +102,6 @@
 
           <!-- Section: Selected Projects -->
           <section>
-            <!-- Margin bottom dikurangi 50% (mb-4 -> mb-2) -->
             <h2 class="text-[14px] font-bold text-[#3b5bdb] mb-2 border-b border-slate-50 pb-1">Selected Projects</h2>
             <div class="space-y-5">
               <div v-for="project in projects" :key="project.title" class="text-sidebar">
@@ -116,7 +113,6 @@
 
           <!-- Section: Education -->
           <section>
-            <!-- Konsistensi margin bottom dikurangi (mb-4 -> mb-2) -->
             <h2 class="text-[14px] font-bold text-[#3b5bdb] mb-2 border-b border-slate-50 pb-1">Education</h2>
             <div class="space-y-2 text-sidebar">
               <div v-for="edu in education" :key="edu.school">
@@ -131,7 +127,6 @@
 
           <!-- Section: Interests -->
           <section>
-            <!-- Konsistensi margin bottom dikurangi (mb-4 -> mb-2) -->
             <h2 class="text-[14px] font-bold text-[#3b5bdb] mb-2 border-b border-slate-50 pb-1">Interests</h2>
             <p class="text-sidebar text-slate-500 font-medium leading-relaxed">
               {{ interests }}
@@ -147,75 +142,54 @@
     createApp({
       data() {
         return {
-          name: 'Brittany Chiang',
-          tagline: 'Experienced software engineer with a focus on building engaging & accessible digital experiences.',
+          name: 'Wibowo Sulistiyo',
+          tagline: 'Backend Specialist & CLI Enthusiast focused on high-performance systems, distributed architecture, and terminal-based automation.',
           contact: {
-            email: 'brittany.chiang@gmail.com',
-            phone: '(914) 960-3665',
-            github: 'github.com/bchiang7',
-            website: 'brittanychiang.com'
+            email: 'wibowo.sulistiyo@gmail.com',
+            phone: '(+62) 812 3456 7890',
+            github: 'github.com/abu-abbas',
+            website: 'abu-abbas.github.io'
           },
           skills: [
-            { title: 'Programming Languages', items: 'JavaScript (ES2015+), TypeScript, HTML, CSS, Sass, PHP, GraphQL' },
-            { title: 'Libraries & Frameworks', items: 'React, Next.js, Gatsby, Eleventy, Node.js, React Native, Tailwind CSS, Styled Components, Framer Motion, Anime.js, Timber for WordPress' },
-            { title: 'Tools & Platforms', items: 'Git, GitHub, Netlify, Vercel, Heroku, WordPress, Contentful, Algolia, Firebase, Storybook, Docker, Webpack, Figma' }
+            { title: 'Languages & Scripting', items: 'Go, PHP, TypeScript, JavaScript (ES6+), Shell Scripting (Bash/Zsh), Oracle, MySQL, PostgreSQL' },
+            { title: 'Backend & Architecture', items: 'Clean Architecture, Microservices, Distributed Queues (Redis/RabbitMQ), RESTful APIs, Performance Tuning' },
+            { title: 'Infrastructure & CLI', items: 'Linux/Unix, Docker, Git, Vim, Custom CLI Tooling, CI/CD Pipelines' }
           ],
           experiences: [
             {
-              company: 'Upstatement',
+              company: 'Pemprov DKI Jakarta',
               roles: [
-                { title: 'Lead Engineer', period: 'Mar 2022 — Present' },
-                { title: 'Senior Engineer', period: 'Sept 2020 — Mar 2022' },
-                { title: 'Engineer', period: 'May 2018 — Sept 2020' }
+                { title: 'Senior Software Engineer', period: 'Jan 2024 — Present' },
+                { title: 'Software Engineer', period: 'Jun 2021 — Dec 2023' }
               ],
               bullets: [
-                'Build, style, and ship high-quality websites, design systems, mobile apps, and cross-platform digital experiences for a diverse array of clients using technologies such as JavaScript, TypeScript, React, CSS, WordPress, Contentful, and more.',
-                'Lead the development and architecture of technical tools like content management systems, REST APIs, and continuous integration pipelines to fulfill business requirements.',
-                'Work alongside product & project managers, designers, and other engineers to transform creative concepts into refined digital experiences at an agile (2 week) cadence.',
-                'Provide leadership within engineering department through close collaboration, building tools to improve developer experience, and mentorship.',
-                'Spearhead company-wide accessibility initiatives such as creating documentation for best practices, establishing a standard accessibility checklist for developers, and facilitating knowledge shares.'
+                'Architected and optimized high-concurrency backend services, handling millions of requests with minimal latency.',
+                'Developed custom internal CLI tools to automate deployment workflows and system monitoring, reducing manual tasks by 60%.',
+                'Implemented distributed queue systems for background processing, ensuring reliable data consistency across microservices.',
+                'Performed deep application tuning and database optimization to improve overall system throughput and response times.'
               ]
             },
             {
-              company: 'Scout Studio',
-              roles: [{ title: 'Developer', period: 'Spring 2017 & 2018' }],
+              company: 'Digital Solutions Ltd',
+              roles: [{ title: 'Junior Web Developer', period: 'Jan 2019 — May 2021' }],
               bullets: [
-                'Collaborated with other student designers and engineers on pro-bono projects to create new brands, design systems, and websites for organizations in the community.',
-                'Built and delivered technical solutions according to stakeholder business requirements.'
-              ]
-            },
-            {
-              company: 'Apple',
-              roles: [{ title: 'UI Engineer Co-op', period: 'July — Dec 2017' }],
-              bullets: [
-                'Developed and styled interactive web applications for Apple Music using Ember and SCSS.',
-                'Built and shipped the Apple Music Extension for Facebook Messenger leveraging third-party and internal API integrations.',
-                'Architected and implemented the user interface of Apple Music\'s embeddable web player widget for in-browser user authorization and full song playback.',
-                'Contributed extensively to the creation of MusicKit JS, a public-facing JavaScript SDK for embedding Apple Music players into web applications.'
-              ]
-            },
-            {
-              company: 'Starry',
-              roles: [{ title: 'Software Engineer Co-op', period: 'July — Dec 2016' }],
-              bullets: [
-                'Engineered and improved major features of Starry\'s customer-facing Android web app using Cordova, ES6, Handlebars, Backbone, Marionette, and CSS.',
-                'Proposed and implemented scalable solutions to issues identified with cloud services and user-facing applications responsible for communicating with the Starry Station router.'
+                'Built performant backend APIs and integrated them with modern frontend frameworks.',
+                'Automated repetitive server maintenance tasks using shell scripts and cron jobs.'
               ]
             }
           ],
           projects: [
-            { title: 'Build a Spotify Connected App', description: 'Video course that teaches how to build a web app with the Spotify API. Topics covered include REST APIs, user auth flows, Node, Express, React, Styled Components, and more.' },
-            { title: 'Halcyon VS Code Theme', description: 'Dark blue theme for Visual Studio Code with 100k+ installs.' },
-            { title: 'brittanychiang.com (v4)', description: 'Old personal website built with Gatsby with 7k+ stars and 3k+ forks.' }
+            { title: 'Custom CLI Automation Kit', description: 'A collection of terminal tools built in Go to streamline microservice scaffolding and environment configuration.' },
+            { title: 'High-Throughput Queue Manager', description: 'A specialized service for handling massive asynchronous job processing with advanced retry logic and monitoring.' }
           ],
           education: [
             {
-              school: 'Northeastern University',
-              degree: 'Bachelor of Science in Information Science',
-              details: ['Human Computer Interaction Concentration', 'Interaction & Experience Design Minors']
+              school: 'Universitas Budi Luhur Jakarta',
+              degree: 'Bachelor of Computer Science',
+              details: ['Information Technology']
             }
           ],
-          interests: 'Web accessibility, rock climbing, snowboarding, science fiction & fantasy novels, The Legend of Zelda: Breath of the Wild & Tears of the Kingdom'
+          interests: 'Backend systems architecture, high-performance computing, distributed queue patterns, CLI tool development, terminal-based productivity, shell scripting.'
         }
       }
     }).mount('#app')
