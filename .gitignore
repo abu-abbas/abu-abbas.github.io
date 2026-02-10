@@ -1,5 +1,6 @@
 node_modules/
 .output-pdf/
+.yarn-cache/
 
 # Build output
 dist/
