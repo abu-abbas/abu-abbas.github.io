@@ -30,6 +30,7 @@
 - `vite.config.ts` handles base path for user page (`/`) and project pages (`/<repo>/`) in Actions context.
 - GitHub Actions workflow exists at:
   - `.github/workflows/deploy-pages.yml`
+- Actions deploy trigger branch: `source`.
 - If Actions is blocked, manual deploy path is used.
 
 ## Manual Deploy Flow

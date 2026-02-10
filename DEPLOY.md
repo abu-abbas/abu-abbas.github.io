@@ -53,3 +53,21 @@ If your source or deploy branch names are different:
 ```bash
 bash ./scripts/deploy-manual.sh <source-branch> <deploy-branch>
 ```
+
+## Switch To GitHub Actions (When Billing Is Unlocked)
+
+When GitHub Actions is available again, you can switch from manual deploy to Actions deploy:
+
+1. Open repository settings -> Pages.
+2. Set `Source` to `GitHub Actions`.
+3. Keep working on `source` branch.
+4. Push to `source` (or run workflow manually).
+
+Workflow file:
+
+- `.github/workflows/deploy-pages.yml`
+
+Current trigger:
+
+- `push` on `source`
+- `workflow_dispatch`
