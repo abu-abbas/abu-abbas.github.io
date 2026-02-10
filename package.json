@@ -1,13 +1,16 @@
 {
   "name": "cv-online",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "deploy:manual": "bash ./scripts/deploy-manual.sh",
+    "release:patch": "bash ./scripts/release.sh patch",
+    "release:minor": "bash ./scripts/release.sh minor",
+    "release:major": "bash ./scripts/release.sh major",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",
