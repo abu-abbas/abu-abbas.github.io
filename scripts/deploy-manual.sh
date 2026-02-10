@@ -36,6 +36,14 @@ find "$WORKTREE_DIR" -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
 cp -R dist/. "$WORKTREE_DIR/"
 touch "$WORKTREE_DIR/.nojekyll"
 
+# Force Pages to detect a new deploy even when build output is unchanged.
+SOURCE_SHA="$(git rev-parse --short HEAD)"
+cat > "$WORKTREE_DIR/.deploy-meta.txt" <<META
+source_branch=$SOURCE_BRANCH
+source_sha=$SOURCE_SHA
+deployed_at_utc=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+META
+
 pushd "$WORKTREE_DIR" >/dev/null
 git add -A
 
