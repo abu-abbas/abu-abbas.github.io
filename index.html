@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV Brittany Chiang - High Density Vue Version</title>
+  <!-- Vue 3 Global Build -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-feature-settings: "cv02", "cv05", "cv08", "cv11";
+    }
+    .name-heading {
+      letter-spacing: -0.05em;
+      line-height: 0.9;
+    }
+    .text-content { font-size: 13px; line-height: 1.4; }
+    .text-bullet { font-size: 12px; line-height: 1.6; }
+    .text-sidebar { font-size: 11.5px; line-height: 1.5; }
+  </style>
+</head>
+<body class="bg-white text-[#4a5568] selection:bg-blue-50 selection:text-[#3b5bdb]">
+  <div id="app">
+    <div class="max-w-5xl mx-auto px-6 py-8 md:px-10 lg:px-16">
+      
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-14">
+        
+        <!-- Kolom Kiri: Konten Utama -->
+        <div class="md:col-span-8">
+          <header class="mb-8">
+            <h1 class="text-[54px] font-bold text-[#3b5bdb] name-heading mb-3">
+              {{ name }}
+            </h1>
+            <p class="text-[14px] text-slate-500 max-w-md leading-relaxed font-medium">
+              {{ tagline }}
+            </p>
+          </header>
+
+          <section>
+            <!-- Margin bottom dikurangi 50% (mb-6 -> mb-3) -->
+            <h2 class="text-[14px] font-bold text-[#3b5bdb] mb-3">
+              Relevant Experience
+            </h2>
+
+            <div class="space-y-8">
+              <div v-for="(exp, index) in experiences" :key="index">
+                <!-- Roles Header -->
+                <div class="space-y-0.5 mb-2.5">
+                  <div v-for="(role, rIndex) in exp.roles" :key="rIndex" class="flex items-baseline gap-x-2">
+                    <h3 class="text-content">
+                      <span class="font-normal text-slate-700">{{ role.title }}</span>
+                      <template v-if="rIndex === 0">
+                        <span class="text-slate-300 mx-1.5 font-normal">·</span>
+                        <span class="font-bold text-slate-900">{{ exp.company }}</span>
+                      </template>
+                    </h3>
+                    <span class="text-[10.5px] text-slate-400 font-medium whitespace-nowrap">
+                      {{ role.period }}
+                    </span>
+                  </div>
+                </div>
+                
+                <!-- Bullet Points -->
+                <ul class="space-y-1.5">
+                  <li v-for="(bullet, bIndex) in exp.bullets" :key="bIndex" class="flex items-start text-bullet text-slate-500">
+                    <span class="mr-3 mt-[0.5rem] shrink-0 w-1 h-1 rounded-full bg-slate-500"></span>
+                    <span>{{ bullet }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Kolom Kanan: Sidebar -->
+        <div class="md:col-span-4 space-y-10 mt-1">
+          
+          <!-- Kontak Info -->
+          <div class="text-sidebar space-y-0.5 text-slate-400 font-medium tracking-tight text-left mb-6">
+            <p class="hover:text-[#3b5bdb] transition-colors cursor-pointer">{{ contact.email }}</p>
+            <p>{{ contact.phone }}</p>
+            <p class="hover:text-[#3b5bdb] transition-colors cursor-pointer">{{ contact.github }}</p>
+            <p class="hover:text-[#3b5bdb] transition-colors cursor-pointer">{{ contact.website }}</p>
+          </div>
+
+          <!-- Section: Skills -->
+          <section>
+            <!-- Margin bottom dikurangi 50% (mb-4 -> mb-2) -->
+            <h2 class="text-[14px] font-bold text-[#3b5bdb] mb-2 border-b border-slate-50 pb-1">Skills</h2>
+            <div class="space-y-5">
+              <div v-for="skill in skills" :key="skill.title" class="text-sidebar">
+                <h3 class="font-bold text-slate-800 mb-0.5">{{ skill.title }}</h3>
+                <p class="text-slate-500 font-medium leading-relaxed">{{ skill.items }}</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section: Selected Projects -->
+          <section>
+            <!-- Margin bottom dikurangi 50% (mb-4 -> mb-2) -->
+            <h2 class="text-[14px] font-bold text-[#3b5bdb] mb-2 border-b border-slate-50 pb-1">Selected Projects</h2>
+            <div class="space-y-5">
+              <div v-for="project in projects" :key="project.title" class="text-sidebar">
+                <h3 class="font-bold text-slate-800 mb-0.5">{{ project.title }}</h3>
+                <p class="text-slate-500 font-medium leading-relaxed">{{ project.description }}</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section: Education -->
+          <section>
+            <!-- Konsistensi margin bottom dikurangi (mb-4 -> mb-2) -->
+            <h2 class="text-[14px] font-bold text-[#3b5bdb] mb-2 border-b border-slate-50 pb-1">Education</h2>
+            <div class="space-y-2 text-sidebar">
+              <div v-for="edu in education" :key="edu.school">
+                <h3 class="font-bold text-slate-800">{{ edu.school }}</h3>
+                <p class="text-slate-500 font-medium leading-tight">{{ edu.degree }}</p>
+                <p v-for="detail in edu.details" :key="detail" class="text-[9.5px] text-slate-400 uppercase tracking-widest font-bold mt-0.5">
+                  {{ detail }}
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section: Interests -->
+          <section>
+            <!-- Konsistensi margin bottom dikurangi (mb-4 -> mb-2) -->
+            <h2 class="text-[14px] font-bold text-[#3b5bdb] mb-2 border-b border-slate-50 pb-1">Interests</h2>
+            <p class="text-sidebar text-slate-500 font-medium leading-relaxed">
+              {{ interests }}
+            </p>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+    createApp({
+      data() {
+        return {
+          name: 'Brittany Chiang',
+          tagline: 'Experienced software engineer with a focus on building engaging & accessible digital experiences.',
+          contact: {
+            email: 'brittany.chiang@gmail.com',
+            phone: '(914) 960-3665',
+            github: 'github.com/bchiang7',
+            website: 'brittanychiang.com'
+          },
+          skills: [
+            { title: 'Programming Languages', items: 'JavaScript (ES2015+), TypeScript, HTML, CSS, Sass, PHP, GraphQL' },
+            { title: 'Libraries & Frameworks', items: 'React, Next.js, Gatsby, Eleventy, Node.js, React Native, Tailwind CSS, Styled Components, Framer Motion, Anime.js, Timber for WordPress' },
+            { title: 'Tools & Platforms', items: 'Git, GitHub, Netlify, Vercel, Heroku, WordPress, Contentful, Algolia, Firebase, Storybook, Docker, Webpack, Figma' }
+          ],
+          experiences: [
+            {
+              company: 'Upstatement',
+              roles: [
+                { title: 'Lead Engineer', period: 'Mar 2022 — Present' },
+                { title: 'Senior Engineer', period: 'Sept 2020 — Mar 2022' },
+                { title: 'Engineer', period: 'May 2018 — Sept 2020' }
+              ],
+              bullets: [
+                'Build, style, and ship high-quality websites, design systems, mobile apps, and cross-platform digital experiences for a diverse array of clients using technologies such as JavaScript, TypeScript, React, CSS, WordPress, Contentful, and more.',
+                'Lead the development and architecture of technical tools like content management systems, REST APIs, and continuous integration pipelines to fulfill business requirements.',
+                'Work alongside product & project managers, designers, and other engineers to transform creative concepts into refined digital experiences at an agile (2 week) cadence.',
+                'Provide leadership within engineering department through close collaboration, building tools to improve developer experience, and mentorship.',
+                'Spearhead company-wide accessibility initiatives such as creating documentation for best practices, establishing a standard accessibility checklist for developers, and facilitating knowledge shares.'
+              ]
+            },
+            {
+              company: 'Scout Studio',
+              roles: [{ title: 'Developer', period: 'Spring 2017 & 2018' }],
+              bullets: [
+                'Collaborated with other student designers and engineers on pro-bono projects to create new brands, design systems, and websites for organizations in the community.',
+                'Built and delivered technical solutions according to stakeholder business requirements.'
+              ]
+            },
+            {
+              company: 'Apple',
+              roles: [{ title: 'UI Engineer Co-op', period: 'July — Dec 2017' }],
+              bullets: [
+                'Developed and styled interactive web applications for Apple Music using Ember and SCSS.',
+                'Built and shipped the Apple Music Extension for Facebook Messenger leveraging third-party and internal API integrations.',
+                'Architected and implemented the user interface of Apple Music\'s embeddable web player widget for in-browser user authorization and full song playback.',
+                'Contributed extensively to the creation of MusicKit JS, a public-facing JavaScript SDK for embedding Apple Music players into web applications.'
+              ]
+            },
+            {
+              company: 'Starry',
+              roles: [{ title: 'Software Engineer Co-op', period: 'July — Dec 2016' }],
+              bullets: [
+                'Engineered and improved major features of Starry\'s customer-facing Android web app using Cordova, ES6, Handlebars, Backbone, Marionette, and CSS.',
+                'Proposed and implemented scalable solutions to issues identified with cloud services and user-facing applications responsible for communicating with the Starry Station router.'
+              ]
+            }
+          ],
+          projects: [
+            { title: 'Build a Spotify Connected App', description: 'Video course that teaches how to build a web app with the Spotify API. Topics covered include REST APIs, user auth flows, Node, Express, React, Styled Components, and more.' },
+            { title: 'Halcyon VS Code Theme', description: 'Dark blue theme for Visual Studio Code with 100k+ installs.' },
+            { title: 'brittanychiang.com (v4)', description: 'Old personal website built with Gatsby with 7k+ stars and 3k+ forks.' }
+          ],
+          education: [
+            {
+              school: 'Northeastern University',
+              degree: 'Bachelor of Science in Information Science',
+              details: ['Human Computer Interaction Concentration', 'Interaction & Experience Design Minors']
+            }
+          ],
+          interests: 'Web accessibility, rock climbing, snowboarding, science fiction & fantasy novels, The Legend of Zelda: Breath of the Wild & Tears of the Kingdom'
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+</html>
