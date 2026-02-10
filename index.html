@@ -13,7 +13,6 @@
   <!-- Font Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Transisi halus UI */
     * {
       transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
       box-sizing: border-box;
@@ -26,7 +25,6 @@
       font-feature-settings: "cv02", "cv05", "cv08", "cv11";
       margin: 0;
       padding: 0;
-      text-rendering: optimizeLegibility;
     }
 
     .name-heading {
@@ -35,32 +33,30 @@
     }
     .text-content { font-size: 13.5px; line-height: 1.4; }
     .text-bullet { font-size: 11.5px; line-height: 1.55; }
-    .text-sidebar { font-size: 10.8px; line-height: 1.45; }
+    .text-sidebar { font-size: 11px; line-height: 1.45; }
 
-    /* --- PDF CLONE AREA (HIDDEN) --- */
-    #pdf-ghost-container {
-      position: absolute;
-      left: -9999px;
-      top: -9999px;
-      width: 850px;
-      background: white;
-    }
-
-    .pdf-export-styles {
-      width: 850px !important;
-      padding: 60px 80px !important; /* Padding aman agar 'W' tidak terpotong */
+    /* --- PDF EXPORT OPTIMIZATION --- */
+    .pdf-export-container {
+      width: 820px !important; 
+      min-width: 820px !important;
+      max-width: 820px !important;
       background: white !important;
       color: #1e1f20 !important;
+      padding: 50px 70px !important; /* Padding seimbang kiri-kanan */
       font-family: 'Inter', sans-serif !important;
     }
-
-    .pdf-export-styles .grid {
+    
+    /* Memaksa Grid dua kolom tetap stabil di PDF */
+    .pdf-export-container .grid {
       display: grid !important;
       grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+      width: 100% !important;
       gap: 3rem !important;
     }
 
-    /* Standard Browser Print */
+    .pdf-export-container .name-heading { font-size: 44px !important; color: #1e1f20 !important; }
+    .pdf-export-container .section-title { color: #1e1f20 !important; font-weight: 700 !important; border: none !important; }
+
     @media print {
       @page { margin: 0; size: A4; }
       #app-content {
@@ -81,7 +77,6 @@
       header { margin-bottom: 1.2rem !important; }
       .name-heading { font-size: 42px !important; color: #1e1f20 !important; }
       .bullet-dot { background-color: #1e1f20 !important; -webkit-print-color-adjust: exact; }
-      * { transition: none !important; }
     }
   </style>
 </head>
@@ -94,10 +89,10 @@
       
       <!-- Panel Kontrol Monochrome (no-print) -->
       <div class="fixed top-8 right-8 no-print z-50 flex flex-col gap-3">
-        <!-- Toggle Tema (Monochrome) -->
+        <!-- Toggle Tema -->
         <button @click="toggleDarkMode" title="Ganti Tema"
                 class="flex h-10 w-10 items-center justify-center rounded-full border shadow-lg transition-all active:scale-90"
-                :class="isDark ? 'bg-zinc-800 border-zinc-700 text-zinc-200' : 'bg-white border-zinc-200 text-zinc-800 hover:bg-zinc-50'">
+                :class="isDark ? 'bg-zinc-800 border-zinc-700 text-zinc-300 hover:bg-zinc-700' : 'bg-white border-zinc-200 text-zinc-800 hover:bg-zinc-50'">
           <svg v-if="isDark" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707.707M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
@@ -106,27 +101,27 @@
           </svg>
         </button>
 
-        <!-- Cetak Manual (Monochrome) -->
-        <button @click="printCV" title="Buka Dialog Cetak"
+        <!-- Cetak Manual -->
+        <button @click="printCV" title="Cetak Manual"
                 class="flex h-10 w-10 items-center justify-center rounded-full border shadow-lg transition-all active:scale-90"
-                :class="isDark ? 'bg-zinc-800 border-zinc-700 text-zinc-200' : 'bg-white border-zinc-200 text-zinc-800 hover:bg-zinc-50'">
+                :class="isDark ? 'bg-zinc-800 border-zinc-700 text-zinc-300 hover:bg-zinc-700' : 'bg-white border-zinc-200 text-zinc-800 hover:bg-zinc-50'">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
           </svg>
         </button>
 
-        <!-- Download PDF (Auto) -->
+        <!-- Download PDF -->
         <button @click="downloadPDF" title="Unduh PDF Langsung"
                 class="flex h-10 w-10 items-center justify-center rounded-full border shadow-lg transition-all active:scale-90"
-                :class="isDark ? 'bg-zinc-800 border-zinc-700 text-zinc-200' : 'bg-white border-zinc-200 text-zinc-800 hover:bg-zinc-50'">
+                :class="isDark ? 'bg-zinc-800 border-zinc-700 text-zinc-300 hover:bg-zinc-700' : 'bg-white border-zinc-200 text-zinc-800 hover:bg-zinc-50'">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg>
         </button>
       </div>
 
-      <!-- Main Visible Layout -->
-      <div id="cv-render-area" class="max-w-5xl mx-auto px-6 py-10 md:px-12 lg:px-20">
+      <!-- Area Tampilan Utama -->
+      <div id="cv-capture-area" class="max-w-5xl mx-auto px-6 py-10 md:px-12 lg:px-20">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-14">
           
           <!-- Column: Main Content -->
@@ -143,8 +138,8 @@
             </header>
 
             <section>
-              <!-- Fix: Remove uppercase -->
-              <h2 class="text-[13.5px] font-bold mb-6 transition-colors tracking-widest"
+              <!-- Fix: Sentence Case -->
+              <h2 class="text-[13.5px] font-bold mb-6 transition-colors tracking-tight"
                   :class="isDark ? 'text-white' : 'text-[#1e1f20]'">
                 Relevant Experience
               </h2>
@@ -190,7 +185,7 @@
 
             <!-- Skills -->
             <section>
-              <h2 class="text-[12px] font-bold mb-4 tracking-widest transition-colors"
+              <h2 class="text-[12px] font-bold mb-4 tracking-tight transition-colors"
                   :class="isDark ? 'text-white' : 'text-[#1e1f20]'">Skills</h2>
               <div class="space-y-6">
                 <div v-for="item in skillGroups" :key="item.title" class="text-sidebar">
@@ -202,7 +197,7 @@
 
             <!-- Projects -->
             <section>
-              <h2 class="text-[12px] font-bold mb-4 tracking-widest transition-colors"
+              <h2 class="text-[12px] font-bold mb-4 tracking-tight transition-colors"
                   :class="isDark ? 'text-white' : 'text-[#1e1f20]'">Selected Projects</h2>
               <div class="space-y-6">
                 <div v-for="project in selectedProjects" :key="project.title" class="text-sidebar">
@@ -214,7 +209,7 @@
 
             <!-- Education -->
             <section>
-              <h2 class="text-[12px] font-bold mb-4 tracking-widest transition-colors"
+              <h2 class="text-[12px] font-bold mb-4 tracking-tight transition-colors"
                   :class="isDark ? 'text-white' : 'text-[#1e1f20]'">Education</h2>
               <div class="space-y-3 text-sidebar">
                 <h3 class="font-bold" :class="isDark ? 'text-slate-200' : 'text-[#1e1f20]'">Universitas Budi Luhur Jakarta</h3>
@@ -225,9 +220,9 @@
               </div>
             </section>
 
-            <!-- Interests (Back in Sidebar) -->
-            <section>
-              <h2 class="text-[12px] font-bold mb-4 tracking-widest transition-colors"
+            <!-- Interests (Sesuai Sidebar Asli) -->
+            <section id="interests-section">
+              <h2 class="text-[12px] font-bold mb-4 tracking-tight transition-colors"
                   :class="isDark ? 'text-white' : 'text-[#1e1f20]'">Interests</h2>
               <p class="text-sidebar font-medium leading-relaxed opacity-85" :class="isDark ? 'text-slate-400' : 'text-slate-500'">
                 Backend architecture, distributed systems, distributed queues, CLI tools, shell scripting, and clean architecture.
@@ -236,13 +231,6 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Area Tersembunyi khusus Ekspor (Anti-Cutoff) -->
-    <div id="pdf-ghost-container">
-        <div id="cv-ghost-content" class="pdf-export-styles">
-            <!-- Isi CV akan dicloning ke sini lewat JavaScript -->
-        </div>
     </div>
   </div>
 
@@ -304,36 +292,44 @@
           window.print();
         },
         async downloadPDF() {
-          // 1. Tunggu Font Inter ready sepenuhnya
+          // 1. Tunggu Font Inter dimuat 100%
           await document.fonts.ready;
           
-          // 2. Clone konten asli ke "Ghost Container" (Hidden)
-          const source = document.getElementById('cv-render-area');
-          const ghost = document.getElementById('cv-ghost-content');
-          ghost.innerHTML = source.innerHTML;
-
-          // 3. Konfigurasi Ekspor Presisi
+          // 2. Siapkan area tangkapan
+          const wasDark = this.isDark;
+          this.isDark = false; // Paksa ke mode terang untuk PDF
+          
+          const element = document.getElementById('cv-capture-area');
+          
+          // 3. Konfigurasi Ekspor yang SANGAT PRESISI
           const opt = {
             margin: 0,
             filename: 'CV_Wibowo_Sulistiyo.pdf',
             image: { type: 'jpeg', quality: 1 },
             html2canvas: { 
-              scale: 3, // Kualitas HD
+              scale: 2.5, // Kualitas tajam tapi stabil
               useCORS: true, 
               letterRendering: true,
               scrollX: 0, 
               scrollY: 0,
-              windowWidth: 850 // Kunci lebar window render
+              windowWidth: 1024, // Kunci lebar window render
+              onclone: (clonedDoc) => {
+                 // Tambahkan class styling PDF khusus ke dokumen hasil clone
+                 const container = clonedDoc.getElementById('cv-capture-area');
+                 container.classList.add('pdf-export-container');
+              }
             },
             jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
           };
 
           try {
-            await html2pdf().set(opt).from(ghost).save();
+            // Beri sedikit jeda agar Vue merender mode terang
+            await new Promise(r => setTimeout(r, 400));
+            await html2pdf().set(opt).from(element).save();
           } catch (err) {
             console.error("PDF Export failed:", err);
           } finally {
-            ghost.innerHTML = ""; // Bersihkan memory
+            this.isDark = wasDark; // Kembalikan tema asli
           }
         },
         syncTheme() {
