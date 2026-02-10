@@ -1,0 +1,21 @@
+node_modules/
+.output-pdf/
+
+# Build output
+dist/
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+yarn-debug.log*
+yarn-error.log*
+npm-debug.log*
+
+# OS/editor noise
+.DS_Store
+.idea/
+.vscode/

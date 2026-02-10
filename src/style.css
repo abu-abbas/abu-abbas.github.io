@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[v-cloak] {
+  display: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv02', 'cv05', 'cv08', 'cv11';
+  margin: 0;
+  padding: 0;
+}
+
+.name-heading {
+  letter-spacing: -0.06em;
+  line-height: 0.85;
+}
+.text-content {
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+.text-bullet {
+  font-size: 11.5px;
+  line-height: 1.55;
+}
+.text-sidebar {
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.pdf-export-container {
+  width: 794px !important;
+  min-width: 794px !important;
+  max-width: 794px !important;
+  background: #fff !important;
+  color: #1e1f20 !important;
+  margin: 0 auto !important;
+}
+
+.pdf-export-container.no-tailwind-padding {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.pdf-export-inner {
+  padding: 40px 48px !important;
+}
+
+.pdf-export-inner .space-y-12 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 1.4rem !important;
+}
+.pdf-export-inner .space-y-8 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 1.1rem !important;
+}
+.pdf-export-inner .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 1rem !important;
+}
+.pdf-export-inner .space-y-3 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0.5rem !important;
+}
+.pdf-export-inner .space-y-2 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0.35rem !important;
+}
+
+.pdf-export-inner .text-bullet {
+  line-height: 1.45 !important;
+}
+.pdf-export-inner .text-sidebar {
+  line-height: 1.28 !important;
+}
+
+.pdf-export-inner,
+.pdf-export-inner * {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+.pdf-export-inner p,
+.pdf-export-inner li,
+.pdf-export-inner span,
+.pdf-export-inner a {
+  opacity: 1 !important;
+  color: #2b2b2b !important;
+}
+
+.pdf-export-inner h1,
+.pdf-export-inner h2,
+.pdf-export-inner h3 {
+  opacity: 1 !important;
+  color: #1e1f20 !important;
+}
+
+.pdf-export-inner .text-\[10\.5px\] {
+  opacity: 1 !important;
+  color: #555 !important;
+}
+
+.pdf-export-inner .grid {
+  display: grid !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+  width: 100% !important;
+  gap: 2.25rem !important;
+}
+
+.pdf-export-inner #interests-section p {
+  font-size: 10px !important;
+  line-height: 1.22 !important;
+  display: block !important;
+  margin-top: 0.3rem !important;
+  color: #2b2b2b !important;
+  opacity: 1 !important;
+  overflow: visible !important;
+}
+
+.pdf-export-inner #interests-section {
+  break-inside: avoid !important;
+  page-break-inside: avoid !important;
+  overflow: visible !important;
+}
+
+.pdf-export-inner .md\\:col-span-8 {
+  grid-column: span 8 / span 8 !important;
+}
+.pdf-export-inner .md\\:col-span-4 {
+  grid-column: span 4 / span 4 !important;
+}
+
+@media print {
+  @page {
+    margin: 0;
+    size: A4;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

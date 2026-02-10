@@ -1,0 +1,66 @@
+{
+  "name": "Wibowo Sulistiyo",
+  "tagline": "Backend Specialist & CLI Enthusiast focused on high-performance systems, distributed architecture, and terminal-based automation.",
+  "contact": {
+    "email": "wibowo.sulistiyo@gmail.com",
+    "phone": "(+62) 812 3456 7890",
+    "github": "github.com/abu-abbas",
+    "website": "abu-abbas.github.io"
+  },
+  "experiences": [
+    {
+      "company": "Pemprov DKI Jakarta",
+      "roles": [
+        { "title": "Senior Software Engineer", "period": "Jan 2024 - Sekarang" },
+        { "title": "Software Engineer", "period": "Jun 2021 - Des 2023" }
+      ],
+      "bullets": [
+        "Merancang dan mengoptimalkan layanan backend konkurensi tinggi, menangani jutaan permintaan dengan latensi minimal.",
+        "Mengembangkan alat CLI internal khusus untuk otomasi alur kerja penerapan dan pemantauan sistem, mengurangi tugas manual sebesar 60%.",
+        "Implementasi sistem antrean terdistribusi untuk pemrosesan latar belakang, memastikan konsistensi data andal di seluruh microservices.",
+        "Melakukan tuning aplikasi mendalam dan optimalisasi database untuk meningkatkan throughput sistem dan mempercepat waktu respons."
+      ]
+    },
+    {
+      "company": "Apple",
+      "roles": [{ "title": "UI Engineer Co-op", "period": "Juli - Des 2017" }],
+      "bullets": [
+        "Mengembangkan aplikasi web interaktif untuk Apple Music menggunakan Ember dan SCSS.",
+        "Membangun Ekstensi Apple Music untuk Facebook Messenger memanfaatkan integrasi API internal Apple.",
+        "Merancang antarmuka pengguna widget pemutar web Apple Music untuk otorisasi pengguna dalam browser."
+      ]
+    }
+  ],
+  "skillGroups": [
+    {
+      "title": "Languages & Scripting",
+      "content": "Go, PHP, TypeScript, JavaScript (ES6+), Shell Scripting (Bash/Zsh), Oracle, MySQL, PostgreSQL"
+    },
+    {
+      "title": "Backend & Architecture",
+      "content": "Clean Architecture, Microservices, Distributed Queues (Redis/RabbitMQ), Performance Tuning"
+    },
+    {
+      "title": "Infrastructure & CLI",
+      "content": "Linux/Unix, Docker, Git, Vim, Custom CLI Tooling, CI/CD Pipelines"
+    }
+  ],
+  "selectedProjects": [
+    {
+      "title": "Custom CLI Automation Kit",
+      "description": "Alat terminal berbasis Go untuk otomatisasi scaffolding microservices dan konfigurasi lingkungan kerja."
+    },
+    {
+      "title": "High-Throughput Queue Manager",
+      "description": "Layanan khusus untuk menangani pemrosesan pekerjaan asinkron masif dengan logika retry tingkat lanjut."
+    }
+  ],
+  "interests": [
+    "Backend architecture",
+    "Distributed systems",
+    "Distributed queues",
+    "CLI tools",
+    "Shell scripting",
+    "Clean architecture"
+  ]
+}
