@@ -11,127 +11,206 @@
   <!-- Font Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* Smooth transitions for theme switching on screen */
+    * {
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+    
     body {
       font-family: 'Inter', sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       font-feature-settings: "cv02", "cv05", "cv08", "cv11";
+      margin: 0;
+      padding: 0;
     }
+
+    /* High-fidelity typography settings */
     .name-heading {
       letter-spacing: -0.05em;
       line-height: 0.9;
     }
-    .text-content { font-size: 13px; line-height: 1.4; }
-    .text-bullet { font-size: 12px; line-height: 1.6; }
+    .text-content { font-size: 13.5px; line-height: 1.4; }
+    .text-bullet { font-size: 12.2px; line-height: 1.55; }
     .text-sidebar { font-size: 11.5px; line-height: 1.5; }
+
+    /* ROBUST PRINT SETTINGS */
+    @media print {
+      @page { 
+        margin: 0; 
+        size: A4; 
+      }
+      
+      /* Force Light Mode and correct contrast for printing */
+      #app-content {
+        background-color: white !important;
+        color: #1e1f20 !important;
+        transition: none !important;
+        padding: 1.5cm !important;
+        min-height: 100vh;
+      }
+
+      /* Ensure the grid layout holds up in the print renderer */
+      .grid {
+        display: grid !important;
+        grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+        gap: 1.5rem !important;
+      }
+      .md\:col-span-8 { grid-column: span 8 / span 8 !important; }
+      .md\:col-span-4 { grid-column: span 4 / span 4 !important; }
+      
+      /* Reset specific element colors for maximum legibility on paper */
+      .name-heading, .section-title { 
+        color: #1e1f20 !important; 
+        font-weight: 700 !important; 
+        border: none !important;
+      }
+      
+      .bullet-dot { 
+        background-color: #1e1f20 !important; 
+        -webkit-print-color-adjust: exact; 
+      }
+      
+      .text-slate-400, .text-slate-500, .text-slate-600 { 
+        color: #4a5568 !important; 
+      }
+
+      /* Hide interactive elements */
+      .no-print { display: none !important; }
+      
+      /* Kill all transitions during print to avoid rendering artifacts */
+      * { transition: none !important; }
+    }
   </style>
 </head>
-<body class="bg-white text-[#4a5568] selection:bg-blue-50 selection:text-[#3b5bdb]">
+<body class="bg-white">
   <div id="app">
-    <div class="max-w-5xl mx-auto px-6 py-8 md:px-10 lg:px-16">
+    <!-- Primary Theme Container -->
+    <div id="app-content" 
+         :class="isDark ? 'bg-[#131314] text-slate-400' : 'bg-white text-slate-600'" 
+         class="min-h-screen relative">
       
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-14">
-        
-        <!-- Kolom Kiri: Konten Utama -->
-        <div class="md:col-span-8">
-          <header class="mb-8">
-            <h1 class="text-[54px] font-bold text-[#3b5bdb] name-heading mb-3">
-              {{ name }}
-            </h1>
-            <p class="text-[14px] text-slate-500 max-w-md leading-relaxed font-medium">
-              {{ tagline }}
-            </p>
-          </header>
+      <!-- Control Panel (Hidden on Print) -->
+      <div class="fixed top-8 right-8 no-print z-50 flex flex-col gap-3">
+        <!-- Dark Mode Toggle -->
+        <button @click="toggleDarkMode" 
+                title="Ganti Tema"
+                class="flex h-10 w-10 items-center justify-center rounded-full border shadow-lg transition-all active:scale-90"
+                :class="isDark ? 'bg-slate-800 border-slate-700 text-yellow-400' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'">
+          <svg v-if="isDark" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707.707M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
 
-          <section>
-            <h2 class="text-[14px] font-bold text-[#3b5bdb] mb-3">
-              Relevant Experience
-            </h2>
+        <!-- Print Button -->
+        <button @click="printCV" 
+                title="Cetak Ke PDF"
+                class="flex h-10 w-10 items-center justify-center rounded-full border shadow-lg transition-all active:scale-90"
+                :class="isDark ? 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+          </svg>
+        </button>
+      </div>
 
-            <div class="space-y-8">
-              <div v-for="(exp, index) in experiences" :key="index">
-                <!-- Roles Header -->
-                <div class="space-y-0.5 mb-2.5">
-                  <div v-for="(role, rIndex) in exp.roles" :key="rIndex" class="flex items-baseline gap-x-2">
-                    <h3 class="text-content">
-                      <span class="font-normal text-slate-700">{{ role.title }}</span>
-                      <template v-if="rIndex === 0">
-                        <span class="text-slate-300 mx-1.5 font-normal">·</span>
-                        <span class="font-bold text-slate-900">{{ exp.company }}</span>
-                      </template>
-                    </h3>
-                    <span class="text-[10.5px] text-slate-400 font-medium whitespace-nowrap">
-                      {{ role.period }}
-                    </span>
-                  </div>
-                </div>
-                
-                <!-- Bullet Points -->
-                <ul class="space-y-1.5">
-                  <li v-for="(bullet, bIndex) in exp.bullets" :key="bIndex" class="flex items-start text-bullet text-slate-500">
-                    <span class="mr-3 mt-[0.5rem] shrink-0 w-1 h-1 rounded-full bg-slate-500"></span>
-                    <span>{{ bullet }}</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <!-- Kolom Kanan: Sidebar -->
-        <div class="md:col-span-4 space-y-10 mt-1">
+      <div class="max-w-5xl mx-auto px-6 py-12 md:px-12 lg:px-20">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16">
           
-          <!-- Kontak Info -->
-          <div class="text-sidebar space-y-0.5 text-slate-400 font-medium tracking-tight text-left mb-6">
-            <p class="hover:text-[#3b5bdb] transition-colors cursor-pointer">{{ contact.email }}</p>
-            <p>{{ contact.phone }}</p>
-            <p class="hover:text-[#3b5bdb] transition-colors cursor-pointer">{{ contact.github }}</p>
-            <p class="hover:text-[#3b5bdb] transition-colors cursor-pointer">{{ contact.website }}</p>
+          <!-- Column: Main Content -->
+          <div class="md:col-span-8">
+            <header class="mb-10">
+              <h1 class="text-[58px] font-bold name-heading mb-4"
+                  :class="isDark ? 'text-white' : 'text-[#1e1f20]'">
+                {{ name }}
+              </h1>
+              <p class="text-[14.5px] leading-relaxed font-medium opacity-80"
+                 :class="isDark ? 'text-slate-400' : 'text-slate-600'">
+                {{ tagline }}
+              </p>
+            </header>
+
+            <section>
+              <h2 class="text-[14px] font-bold mb-5 section-title"
+                  :class="isDark ? 'text-white' : 'text-[#1e1f20]'">
+                Relevant Experience
+              </h2>
+
+              <div class="space-y-10">
+                <div v-for="(exp, index) in experiences" :key="index">
+                  <div class="space-y-0.5 mb-3">
+                    <div v-for="(role, rIndex) in exp.roles" :key="rIndex" class="flex items-baseline gap-x-2">
+                      <h3 class="text-content">
+                        <span class="font-normal" :class="isDark ? 'text-slate-300' : 'text-slate-600'">{{ role.title }}</span>
+                        <template v-if="rIndex === 0">
+                          <span class="text-slate-300 dark:text-slate-600 mx-1.5 font-normal">·</span>
+                          <span class="font-bold" :class="isDark ? 'text-white' : 'text-[#1e1f20]'">{{ exp.company }}</span>
+                        </template>
+                      </h3>
+                      <span class="text-[11px] font-medium whitespace-nowrap" :class="isDark ? 'text-slate-500' : 'text-slate-400'">
+                        {{ role.period }}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <ul class="space-y-2">
+                    <li v-for="(bullet, bIndex) in exp.bullets" :key="bIndex" class="flex items-start text-bullet" :class="isDark ? 'text-slate-400' : 'text-slate-500'">
+                      <span class="mr-3 mt-[0.55rem] shrink-0 w-[5px] h-[5px] rounded-full bullet-dot" 
+                            :class="isDark ? 'bg-slate-400' : 'bg-[#1e1f20]'"></span>
+                      <span>{{ bullet }}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </section>
           </div>
 
-          <!-- Section: Skills -->
-          <section>
-            <h2 class="text-[14px] font-bold text-[#3b5bdb] mb-2 border-b border-slate-50 pb-1">Skills</h2>
-            <div class="space-y-5">
-              <div v-for="skill in skills" :key="skill.title" class="text-sidebar">
-                <h3 class="font-bold text-slate-800 mb-0.5">{{ skill.title }}</h3>
-                <p class="text-slate-500 font-medium leading-relaxed">{{ skill.items }}</p>
-              </div>
+          <!-- Column: Sidebar -->
+          <div class="md:col-span-4 space-y-12 mt-2">
+            
+            <div class="text-sidebar space-y-0.5 font-medium tracking-tight text-left mb-8"
+                 :class="isDark ? 'text-slate-500' : 'text-slate-400'">
+              <p class="hover:text-blue-500 cursor-pointer">{{ contact.email }}</p>
+              <p>{{ contact.phone }}</p>
+              <p class="hover:text-blue-500 cursor-pointer">{{ contact.github }}</p>
+              <p class="hover:text-blue-500 cursor-pointer">{{ contact.website }}</p>
             </div>
-          </section>
 
-          <!-- Section: Selected Projects -->
-          <section>
-            <h2 class="text-[14px] font-bold text-[#3b5bdb] mb-2 border-b border-slate-50 pb-1">Selected Projects</h2>
-            <div class="space-y-5">
-              <div v-for="project in projects" :key="project.title" class="text-sidebar">
-                <h3 class="font-bold text-slate-800 mb-0.5">{{ project.title }}</h3>
-                <p class="text-slate-500 font-medium leading-relaxed">{{ project.description }}</p>
+            <section v-for="section in sideSections" :key="section.title">
+              <h2 class="text-[14px] font-bold mb-4 section-title"
+                  :class="isDark ? 'text-white' : 'text-[#1e1f20]'">{{ section.title }}</h2>
+              <div class="space-y-6">
+                <div v-for="item in section.items" :key="item.title" class="text-sidebar">
+                  <h3 class="font-bold mb-1" :class="isDark ? 'text-slate-200' : 'text-[#1e1f20]'">{{ item.title }}</h3>
+                  <p class="font-medium leading-relaxed opacity-80" :class="isDark ? 'text-slate-400' : 'text-slate-500'">{{ item.content }}</p>
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <!-- Section: Education -->
-          <section>
-            <h2 class="text-[14px] font-bold text-[#3b5bdb] mb-2 border-b border-slate-50 pb-1">Education</h2>
-            <div class="space-y-2 text-sidebar">
-              <div v-for="edu in education" :key="edu.school">
-                <h3 class="font-bold text-slate-800">{{ edu.school }}</h3>
-                <p class="text-slate-500 font-medium leading-tight">{{ edu.degree }}</p>
-                <p v-for="detail in edu.details" :key="detail" class="text-[9.5px] text-slate-400 uppercase tracking-widest font-bold mt-0.5">
-                  {{ detail }}
-                </p>
+            <section>
+              <h2 class="text-[14px] font-bold mb-4 section-title"
+                  :class="isDark ? 'text-white' : 'text-[#1e1f20]'">Education</h2>
+              <div class="space-y-3 text-sidebar">
+                <div>
+                  <h3 class="font-bold" :class="isDark ? 'text-slate-200' : 'text-[#1e1f20]'">Universitas Budi Luhur Jakarta</h3>
+                  <p class="font-medium opacity-80" :class="isDark ? 'text-slate-400' : 'text-slate-500'">Bachelor of Computer Science</p>
+                  <div class="mt-1 space-y-0.5">
+                    <p class="text-[9.5px] uppercase tracking-widest font-bold" :class="isDark ? 'text-slate-600' : 'text-slate-400'">Information Technology</p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <!-- Section: Interests -->
-          <section>
-            <h2 class="text-[14px] font-bold text-[#3b5bdb] mb-2 border-b border-slate-50 pb-1">Interests</h2>
-            <p class="text-sidebar text-slate-500 font-medium leading-relaxed">
-              {{ interests }}
-            </p>
-          </section>
+            <section>
+              <h2 class="text-[14px] font-bold mb-4 section-title"
+                  :class="isDark ? 'text-white' : 'text-[#1e1f20]'">Interests</h2>
+              <p class="text-sidebar font-medium leading-relaxed opacity-80" :class="isDark ? 'text-slate-400' : 'text-slate-500'">
+                {{ interests }}
+              </p>
+            </section>
+          </div>
         </div>
       </div>
     </div>
@@ -142,6 +221,7 @@
     createApp({
       data() {
         return {
+          isDark: false,
           name: 'Wibowo Sulistiyo',
           tagline: 'Backend Specialist & CLI Enthusiast focused on high-performance systems, distributed architecture, and terminal-based automation.',
           contact: {
@@ -150,47 +230,78 @@
             github: 'github.com/abu-abbas',
             website: 'abu-abbas.github.io'
           },
-          skills: [
-            { title: 'Languages & Scripting', items: 'Go, PHP, TypeScript, JavaScript (ES6+), Shell Scripting (Bash/Zsh), Oracle, MySQL, PostgreSQL' },
-            { title: 'Backend & Architecture', items: 'Clean Architecture, Microservices, Distributed Queues (Redis/RabbitMQ), RESTful APIs, Performance Tuning' },
-            { title: 'Infrastructure & CLI', items: 'Linux/Unix, Docker, Git, Vim, Custom CLI Tooling, CI/CD Pipelines' }
-          ],
           experiences: [
             {
               company: 'Pemprov DKI Jakarta',
               roles: [
-                { title: 'Senior Software Engineer', period: 'Jan 2024 — Present' },
-                { title: 'Software Engineer', period: 'Jun 2021 — Dec 2023' }
+                { title: 'Senior Software Engineer', period: 'Jan 2024 — Sekarang' },
+                { title: 'Software Engineer', period: 'Jun 2021 — Des 2023' }
               ],
               bullets: [
-                'Architected and optimized high-concurrency backend services, handling millions of requests with minimal latency.',
-                'Developed custom internal CLI tools to automate deployment workflows and system monitoring, reducing manual tasks by 60%.',
-                'Implemented distributed queue systems for background processing, ensuring reliable data consistency across microservices.',
-                'Performed deep application tuning and database optimization to improve overall system throughput and response times.'
+                'Merancang dan mengoptimalkan layanan backend dengan konkurensi tinggi, menangani jutaan permintaan dengan latensi minimal.',
+                'Mengembangkan alat CLI internal khusus untuk mengotomatiskan alur kerja penerapan dan pemantauan sistem, mengurangi beban tugas manual sebesar 60%.',
+                'Mengimplementasikan sistem antrean terdistribusi untuk pemrosesan latar belakang, memastikan konsistensi data yang andal di seluruh arsitektur microservices.',
+                'Melakukan tuning aplikasi yang mendalam dan optimalisasi database untuk meningkatkan throughput sistem dan mempercepat waktu respons.'
               ]
             },
             {
-              company: 'Digital Solutions Ltd',
-              roles: [{ title: 'Junior Web Developer', period: 'Jan 2019 — May 2021' }],
+              company: 'Apple',
+              roles: [{ title: 'UI Engineer Co-op', period: 'Juli — Des 2017' }],
               bullets: [
-                'Built performant backend APIs and integrated them with modern frontend frameworks.',
-                'Automated repetitive server maintenance tasks using shell scripts and cron jobs.'
+                'Mengembangkan dan menata aplikasi web interaktif untuk Apple Music menggunakan Ember dan SCSS.',
+                'Membangun dan merilis Ekstensi Apple Music untuk Facebook Messenger dengan memanfaatkan integrasi API internal Apple.',
+                'Merancang antarmuka pengguna widget pemutar web yang dapat disematkan Apple Music untuk otorisasi pengguna dalam browser.'
               ]
             }
           ],
-          projects: [
-            { title: 'Custom CLI Automation Kit', description: 'A collection of terminal tools built in Go to streamline microservice scaffolding and environment configuration.' },
-            { title: 'High-Throughput Queue Manager', description: 'A specialized service for handling massive asynchronous job processing with advanced retry logic and monitoring.' }
-          ],
-          education: [
+          sideSections: [
             {
-              school: 'Universitas Budi Luhur Jakarta',
-              degree: 'Bachelor of Computer Science',
-              details: ['Information Technology']
+              title: 'Skills',
+              items: [
+                { title: 'Languages & Scripting', content: 'Go, PHP, TypeScript, JavaScript (ES6+), Shell Scripting (Bash/Zsh), Oracle, MySQL, PostgreSQL' },
+                { title: 'Backend & Architecture', content: 'Clean Architecture, Microservices, Distributed Queues (Redis/RabbitMQ), RESTful APIs, Performance Tuning' },
+                { title: 'Infrastructure & CLI', content: 'Linux/Unix, Docker, Git, Vim, Custom CLI Tooling, CI/CD Pipelines' }
+              ]
+            },
+            {
+              title: 'Selected Projects',
+              items: [
+                { title: 'Custom CLI Automation Kit', content: 'Alat terminal berbasis Go untuk otomatisasi scaffolding microservices dan konfigurasi lingkungan kerja.' },
+                { title: 'High-Throughput Queue Manager', content: 'Layanan khusus untuk menangani pemrosesan pekerjaan asinkron masif dengan logika retry tingkat lanjut.' }
+              ]
             }
           ],
-          interests: 'Backend systems architecture, high-performance computing, distributed queue patterns, CLI tool development, terminal-based productivity, shell scripting.'
+          interests: 'Backend systems architecture, high-performance computing, distributed queue patterns, CLI tool development, terminal-based productivity, shell scripting, and clean architecture.'
         }
+      },
+      methods: {
+        toggleDarkMode() {
+          this.isDark = !this.isDark;
+          localStorage.setItem('cv-theme-wibowo', this.isDark ? 'dark' : 'light');
+        },
+        printCV() {
+          // Attempt to print. Note: This may be blocked in iframe previews.
+          window.print();
+        },
+        syncTheme() {
+          const savedTheme = localStorage.getItem('cv-theme-wibowo');
+          const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+          
+          if (savedTheme) {
+            this.isDark = savedTheme === 'dark';
+          } else {
+            this.isDark = mediaQuery.matches;
+          }
+        }
+      },
+      mounted() {
+        this.syncTheme();
+        // Live listener for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          if (!localStorage.getItem('cv-theme-wibowo')) {
+            this.isDark = e.matches;
+          }
+        });
       }
     }).mount('#app')
   </script>
